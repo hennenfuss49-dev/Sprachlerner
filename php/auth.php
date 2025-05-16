@@ -1,47 +1,59 @@
 <?php
-// Datenbankverbindung
-$host = 'localhost';
-$dbname = 'auth_db';
-$username = 'root';
-$password = '';
+session_start();
+require 'db.php';
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Fehler bei der Verbindung zur Datenbank: " . $e->getMessage());
+$action = $_POST['action'] ?? '';
+$email = $_POST['email'] ?? '';
+$password = $_POST['password'] ?? '';
+$username = $_POST['username'] ?? '';
+
+// Registrierung
+if ($action === 'register') {
+    if (empty($username) || empty($email) || empty($password)) {
+        echo json_encode(['success'=>false, 'message'=>'Alle Felder ausfüllen!']);
+        exit;
+    }
+    // E-Mail bereits vergeben?
+    $stmt = $pdo->prepare("SELECT user_id FROM Users WHERE email = ?");
+    $stmt->execute([$email]);
+    if ($stmt->fetch()) {
+        echo json_encode(['success'=>false, 'message'=>'E-Mail existiert bereits!']);
+        exit;
+    }
+    // Nutzername bereits vergeben?
+    $stmt = $pdo->prepare("SELECT user_id FROM Users WHERE username = ?");
+    $stmt->execute([$username]);
+    if ($stmt->fetch()) {
+        echo json_encode(['success'=>false, 'message'=>'Nutzername existiert bereits!']);
+        exit;
+    }
+
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+    $stmt = $pdo->prepare("INSERT INTO Users (username, email, password_hash) VALUES (?, ?, ?)");
+    $stmt->execute([$username, $email, $password_hash]);
+    echo json_encode(['success'=>true, 'message'=>'Registrierung erfolgreich!']);
+    exit;
 }
 
-// Authentifizierungshandling
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'];
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
-
-    if ($action === 'login') {
-        // Login-Logik
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->execute(['email' => $email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user && password_verify($password, $user['password'])) {
-            echo "Erfolgreich eingeloggt. Willkommen, " . htmlspecialchars($user['email']) . "!";
-        } else {
-            echo "Ungültige E-Mail oder Passwort.";
-        }
-    } elseif ($action === 'register') {
-        // Registrierungs-Logik
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->execute(['email' => $email]);
-
-        if ($stmt->rowCount() > 0) {
-            echo "Diese E-Mail ist bereits registriert.";
-        } else {
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-            $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
-            $stmt->execute(['email' => $email, 'password' => $hashedPassword]);
-            echo "Registrierung erfolgreich. Sie können sich jetzt einloggen.";
-        }
+// Login
+if ($action === 'login') {
+    $stmt = $pdo->prepare("SELECT user_id, username, password_hash FROM Users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+    if ($user && password_verify($password, $user['password_hash'])) {
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['username'] = $user['username'];
+        echo json_encode(['success'=>true, 'username'=>$user['username']]);
+    } else {
+        echo json_encode(['success'=>false, 'message'=>'Login fehlgeschlagen!']);
     }
+    exit;
+}
+
+// Logout
+if ($action === 'logout') {
+    session_destroy();
+    echo json_encode(['success'=>true]);
+    exit;
 }
 ?>
