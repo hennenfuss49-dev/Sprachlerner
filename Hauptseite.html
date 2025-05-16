@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sprachen lernen leicht gemacht</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./css/style.css">
+
+  <!-- Font Awesome für Icons -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="Hauptseite.html"><i class="fas fa-home"></i> Startseite</a></li>
+      <li><a href="#"><i class="fas fa-book-open"></i> Kurse</a></li>
+      <li><a href="#"><i class="fas fa-comments"></i> Community</a></li>
+      <li><a href="#" id="meinProfil"><i class="fas fa-user"></i> Mein Profil</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Sprachen lernen, einfach und effektiv</h1>
+      <p>Entdecke die Freude am Sprachenlernen mit interaktiven Übungen, spannenden Lektionen und einer lebendigen Community.</p>
+      <a href="#" class="btn btn-primary"><i class="fas fa-rocket"></i> Jetzt starten</a>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section class="features container">
+    <h2>Warum uns wählen?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <i class="fas fa-brain feature-icon"></i>
+        <h3>Interaktive Übungen</h3>
+        <p>Übe Vokabeln, Grammatik und Aussprache mit interaktiven, KI-gestützten Übungen.</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-users feature-icon"></i>
+        <h3>Community</h3>
+        <p>Verbinde dich mit anderen Lernenden und Muttersprachlern, um gemeinsam zu wachsen.</p>
+      </div>
+      <div class="feature-card">
+        <i class="fas fa-trophy feature-icon"></i>
+        <h3>Belohnungssystem</h3>
+        <p>Verdiene Punkte, Abzeichen und Belohnungen, während du Fortschritte machst.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Courses Section -->
+  <section class="courses container">
+    <h2>Beliebte Kurse</h2>
+    <div class="courses-grid">
+      <div class="course-card">
+        <h3>Englisch für Anfänger</h3>
+        <p>Starte deine Reise mit der Weltsprache Nr. 1!</p>
+        <a href="#" class="btn">Kurs ansehen</a>
+      </div>
+      <div class="course-card">
+        <h3>Spanisch leicht gemacht</h3>
+        <p>Entdecke die Schönheit der spanischen Sprache.</p>
+        <a href="#" class="btn">Kurs ansehen</a>
+      </div>
+      <div class="course-card">
+        <h3>Japanisch für Einsteiger</h3>
+        <p>Lerne die Grundlagen der faszinierenden japanischen Kultur.</p>
+        <a href="#" class="btn">Kurs ansehen</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta">
+    <h2>Bereit, eine neue Sprache zu lernen?</h2>
+    <p>Schließe dich Tausenden von Lernenden an, die bereits mit uns Fortschritte machen.</p>
+    <a href="#" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Jetzt loslegen</a> 
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Sprachenlerner. Alle Rechte vorbehalten. <i class="fas fa-heart"></i></p>
+  </footer>
+  <!-- Login/Registrierung Modal -->
+  <div id="loginModal" class="modal" style="display:none;">
+    <div class="modal-content card">
+      <span class="close" id="closeModal">&times;</span>
+      <h2 id="form-title">Login</h2>
+      <form id="auth-form">
+        <input type="email" placeholder="E-Mail Adresse" required />
+        <input type="password" placeholder="Passwort" required />
+        <button type="submit" class="btn">Einloggen</button>
+      </form>
+      <div class="toggle">
+        <span id="toggle-text">Noch kein Konto?</span>
+        <a href="#" id="toggle-link">Registrieren</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Modal-Elemente
+    const profilBtn = document.querySelector('#meinProfil');
+    const modal = document.getElementById('loginModal');
+    const closeBtn = document.getElementById('closeModal');
+
+    const formTitle = document.getElementById('form-title');
+    const toggleText = document.getElementById('toggle-text');
+    const toggleLink = document.getElementById('toggle-link');
+    const submitBtn = document.querySelector('#auth-form button');
+
+    // Modal öffnen bei Klick auf "Mein Profil"
+    profilBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      modal.style.display = 'block';
+    });
+
+    // Modal schließen
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // Umschalten zwischen Login und Registrierung
+    toggleLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isLogin = formTitle.textContent === 'Login';
+      formTitle.textContent = isLogin ? 'Registrieren' : 'Login';
+      submitBtn.textContent = isLogin ? 'Registrieren' : 'Einloggen';
+      toggleText.textContent = isLogin
+        ? 'Schon ein Konto?'
+        : 'Noch kein Konto?';
+      toggleLink.textContent = isLogin ? 'Einloggen' : 'Registrieren';
+    });
+  </script>
+
+</body>
+</html>

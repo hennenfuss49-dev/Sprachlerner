@@ -1,0 +1,350 @@
+/* styles.css — Modernes, freundliches Design für Sprachenlernseite */
+
+/* 1. Grundfarben und Variablen */
+:root {
+  --primary-color: #2a9d8f;
+  --secondary-color: #264653;
+  --accent-color: #e9c46a;
+  --background-color: #f1f5f9;
+  --text-color: #333333;
+  --font-family: 'Nunito', sans-serif;
+  --border-radius: 12px;
+  --transition-speed: 0.3s;
+}
+
+/* 2. Reset und Grundlayout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* 3. Headings */
+h1, h2, h3, h4 {
+  color: var(--secondary-color);
+  margin-bottom: 0.5em;
+}
+
+h1 {
+  font-size: 2.2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+}
+
+/* 4. Links */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+a:hover {
+  color: var(--accent-color);
+}
+
+/* 5. Navigation */
+nav {
+  background-color: var(--secondary-color);
+  padding: 1rem 2rem;
+  border-bottom: 4px solid var(--primary-color);
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+}
+
+nav ul li a {
+  color: white;
+  font-weight: bold;
+}
+
+/* 6. Container */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 2rem;
+}
+
+/* 7. Buttons */
+button, .btn {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color var(--transition-speed), transform 0.2s ease;
+}
+
+button:hover, .btn:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+/* 8. Forms */
+input, textarea, select {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: border-color var(--transition-speed);
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+/* 9. Card / Lernkarte */
+.card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* 10. Flashcards */
+.flashcard {
+  background: var(--accent-color);
+  color: var(--secondary-color);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* 11. Footer */
+footer {
+  background-color: var(--secondary-color);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+
+footer i {
+  color: var(--accent-color);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.7; }
+}
+
+/* 12. Responsiv */
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  .features-grid,
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+  color: white;
+  text-align: center;
+  padding: 4rem 2rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  backdrop-filter: blur(4px);
+}
+
+.hero-content .btn {
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+}
+
+/* Features Section */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  text-align: center;
+  padding: 2rem;
+  background: var(--background-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  transition: color var(--transition-speed);
+}
+
+.feature-card:hover .feature-icon {
+  color: var(--accent-color);
+}
+
+/* Courses Section */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.course-card {
+  background: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.course-card img {
+  width: 100%;
+  height: auto;
+}
+
+.course-card h3 {
+  margin: 1rem 0;
+  color: var(--secondary-color);
+}
+
+.course-card p {
+  margin-bottom: 1rem;
+}
+
+.course-card .btn {
+  margin: 1rem;
+}
+
+.course-card .btn:hover {
+  transform: scale(1.05);
+  background-color: var(--accent-color);
+  color: var(--secondary-color);
+}
+
+.course-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Call to Action Section */
+.cta {
+  background: var(--primary-color);
+  color: white;
+  text-align: center;
+  padding: 3rem 2rem;
+  border-radius: var(--border-radius);
+  margin-top: 2rem;
+}
+
+.cta h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.cta p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.cta .btn {
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+  
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.modal-content .close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-content .toggle {
+  text-align: center;
+  margin-top: 1rem;
+}
