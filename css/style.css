@@ -141,7 +141,7 @@ footer {
   color: white;
   text-align: center;
   padding: 1rem;
-  margin-top: 2rem;
+  
 }
 
 footer i {
@@ -184,7 +184,7 @@ footer i {
   text-align: center;
   padding: 4rem 2rem;
   border-bottom-left-radius: 15px;
-   border-bottom-right-radius: 15px;
+  border-bottom-right-radius: 15px;
   margin-bottom: 2rem;
 }
 
@@ -292,7 +292,8 @@ footer i {
   color: white;
   text-align: center;
   padding: 3rem 2rem;
-  border-radius: var(--border-radius);
+   border-top-left-radius: 15px;
+   border-top-right-radius: 15px;
   margin-top: 2rem;
 }
 
