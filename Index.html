@@ -37,7 +37,20 @@
       <a href="#" class="btn btn-primary"><i class="fas fa-rocket"></i> Jetzt starten</a>
     </div>
   </header>
-
+    <div id="profileModal" class="modal" style="display:none;">
+      <div class="modal-content card">
+        <span class="close" id="closeProfileModal">&times;</span>
+        <h2>Mein Profil</h2>
+        <p id="profile-username"></p>
+        <!-- Optional: Logout Button -->
+        <button id="logoutBtn" class="btn">Abmelden</button>
+        <!-- Optional: Fortschritt direkt hier anzeigen -->
+        <div id="profile-progress">
+          <h3>Fortschritt</h3>
+          <ul id="profile-progress-list"></ul>
+        </div>
+      </div>
+    </div>
   <!-- Features Section -->
   <section class="features container">
     <h2>Warum uns wählen?</h2>
@@ -118,105 +131,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    // Modal-Elemente
-    const profilBtn = document.querySelector('#meinProfil');
-    const modal = document.getElementById('loginModal');
-    const closeBtn = document.getElementById('closeModal');
-
-    const formTitle = document.getElementById('form-title');
-    const formAction = document.getElementById('form-action');
-    const regUsername = document.getElementById('reg-username');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const submitBtn = document.querySelector('#auth-form button');
-    const toggleText = document.getElementById('toggle-text');
-    const toggleLink = document.getElementById('toggle-link');
-    const authForm = document.getElementById('auth-form');
-
-    // Modal öffnen bei Klick auf "Mein Profil"
-    profilBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      modal.style.display = 'block';
-    });
-
-    // Modal schließen
-    closeBtn.addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-      }
-    });
-
-    // Umschalten zwischen Login und Registrierung
-    toggleLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (formAction.value === 'login') {
-        formTitle.textContent = 'Registrieren';
-        formAction.value = 'register';
-        submitBtn.textContent = 'Registrieren';
-        toggleText.textContent = 'Schon ein Konto?';
-        toggleLink.textContent = 'Einloggen';
-        regUsername.style.display = 'block';
-      } else {
-        formTitle.textContent = 'Login';
-        formAction.value = 'login';
-        submitBtn.textContent = 'Einloggen';
-        toggleText.textContent = 'Noch kein Konto?';
-        toggleLink.textContent = 'Registrieren';
-        regUsername.style.display = 'none';
-      }
-    });
-
-    // AJAX für Login/Registrierung
-    authForm.addEventListener('submit', function(e){
-      e.preventDefault();
-      const data = {
-        action: formAction.value,
-        email: emailInput.value,
-        password: passwordInput.value,
-        username: regUsername.value // nur bei Registrierung nötig
-      };
-      fetch('auth.php', {
-        method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: Object.keys(data).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(data[k])).join('&')
-      })
-      .then(r => r.json())
-      .then(res => {
-        if(res.success){
-          modal.style.display = 'none';
-          document.getElementById('meinProfil').innerHTML = '<i class="fas fa-user"></i> ' + (res.username || 'Mein Profil');
-          // Fortschritt laden und anzeigen, wenn eingeloggt
-          document.getElementById('progressSection').style.display = 'block';
-          loadProgress();
-        }else{
-          alert(res.message);
-        }
-      });
-    });
-
-    // Fortschritt laden
-    function loadProgress() {
-      fetch('get_progress.php')
-      .then(r => r.json())
-      .then(data => {
-        if(data.success){
-          const prog = data.units.map(u =>
-            `<li>${u.unit_name}: Level ${u.progress_level} (zuletzt: ${u.last_practiced ? u.last_practiced : '-'})</li>`
-          ).join('');
-          document.getElementById('progress-list').innerHTML = prog || '<li>Kein Fortschritt vorhanden.</li>';
-        }
-      });
-    }
-
-    // Optional: Fortschritt direkt versuchen anzuzeigen, falls schon eingeloggt
-    window.addEventListener('DOMContentLoaded', loadProgress);
-  </script>
-
+  <script src="./js/index.js"></script>
 </body>
 </html>

@@ -56,4 +56,14 @@ if ($action === 'logout') {
     echo json_encode(['success'=>true]);
     exit;
 }
+
+// Abfrage ob eingeloggt
+if ($action === 'check') {
+    if (isset($_SESSION['user_id'])) {
+        echo json_encode(['success'=>true, 'username'=>$_SESSION['username']]);
+    } else {
+        echo json_encode(['success'=>false]);
+    }
+    exit;
+}
 ?>
