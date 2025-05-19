@@ -247,6 +247,7 @@ footer i {
 }
 
 .course-card {
+  padding: 1rem;
   background: white;
   border-radius: var(--border-radius);
   overflow: hidden;
