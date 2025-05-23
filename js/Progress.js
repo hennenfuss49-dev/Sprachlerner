@@ -25,7 +25,7 @@
 
     // --- LOGIN CHECK ---
     function checkLogin() {
-      fetch('auth.php', {
+      fetch('../php/auth.php', {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
         body: 'action=check'
@@ -98,7 +98,7 @@ function loadUnits() {
 
     // Logout
     logoutBtn.addEventListener('click', () => {
-      fetch('auth.php', {
+      fetch('../php/auth.php', {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
         body: 'action=logout'
@@ -146,7 +146,7 @@ function loadUnits() {
         email: emailInput.value,
         password: passwordInput.value
       };
-      fetch('auth.php', {
+      fetch('../php/auth.php', {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
         body: Object.keys(data).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(data[k])).join('&')
