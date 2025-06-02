@@ -60,7 +60,7 @@ authForm.addEventListener('submit', function(e){
     password: passwordInput.value,
     username: regUsername.value // nur bei Registrierung nötig
     };
-    fetch('auth.php', {
+    fetch('../php/auth.php', {
     method: 'POST',
     headers: {'Content-Type':'application/x-www-form-urlencoded'},
     body: Object.keys(data).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(data[k])).join('&')
