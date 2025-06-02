@@ -28,7 +28,6 @@ if ($action === 'register') {
         exit;
     }
 
-    $password_hash = password_hash($password, PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("INSERT INTO Users (username, email, password_hash) VALUES (?, ?, ?)");
     $stmt->execute([$username, $email, $password_hash]);
     echo json_encode(['success'=>true, 'message'=>'Registrierung erfolgreich!']);
@@ -40,7 +39,7 @@ if ($action === 'login') {
     $stmt = $pdo->prepare("SELECT user_id, username, password_hash FROM Users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
-    if ($user && password_verify($password, $user['password_hash'])) {
+    if ($user && $password == $user['password_hash']) {
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['username'] = $user['username'];
         echo json_encode(['success'=>true, 'username'=>$user['username']]);

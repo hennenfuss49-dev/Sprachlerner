@@ -1,83 +1,54 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mein Fortschritt</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <title>Mein Fortschritt</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-
 <body>
-  <nav>
-    <ul>
-      <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
-      <li><a href="Progress.html" class="active"><i class="fas fa-list"></i> Mein Fortschritt</a></li>
-      <li><a href="#"><i class="fas fa-comments"></i> Community</a></li>
-      <li><a href="#" id="profilBtn"><i class="fas fa-user"></i> Mein Profil</a></li>
-    </ul>
-  </nav>
+<nav>
+  <ul>
+    <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
+    <li><a href="Progress.html"><i class="fas fa-list"></i> Mein Fortschritt</a></li>
+    <li><a href="#"><i class="fas fa-comments"></i> Community</a></li>
+    <li><a href="#" id="meinProfil"><i class="fas fa-user"></i> Mein Profil</a></li>
+  </ul>
+</nav>
 
-  <section class="container">
-    <header style="margin-bottom:2rem;">
-      <h1><i class="fas fa-list"></i> Mein Fortschritt</h1>
-      <p>Hier findest du deine Kurseinheiten und deinen aktuellen Lernstand.</p>
-    </header>
+<section id="notLoggedIn" style="display:none; text-align:center; margin:2em;">
+    <h2>Bitte melde dich an, um deinen Fortschritt zu sehen.</h2>
+    <button class="btn" id="loginOpenBtn"><i class="fas fa-sign-in-alt"></i> Login / Registrierung</button>
+</section>
 
-    <div id="progressSection" style="display:none;">
-      <div class="card" style="margin-bottom:2rem;">
-        <h2><i class="fas fa-chart-line"></i> Deine Units</h2>
-        <ul id="units-list" style="list-style:none; margin-top:1.5rem;"></ul>
-      </div>
-    </div>
-    <div id="notLoggedIn" class="card" style="display:none;">
-      <h2>Bitte einloggen</h2>
-      <p>Um deinen Fortschritt zu sehen, logge dich bitte ein.</p>
-      <button class="btn" id="loginOpenBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
-    </div>
-  </section>
+<section id="progressSection" style="display:none; max-width:600px; margin:2em auto;">
+    <h2>Deine Units</h2>
+    <ul id="units-list"></ul>
+</section>
 
-  <!-- Profil Modal -->
-  <div id="profileModal" class="modal">
+<!-- Login/Registrierung Modal -->
+<div id="loginModal" class="modal" style="display:none;">
     <div class="modal-content card">
-      <span class="close" id="closeProfileModal">&times;</span>
-      <h2>Mein Profil</h2>
-      <p id="profile-username"></p>
-      <button id="logoutBtn" class="btn">Abmelden</button>
+        <span class="close" id="closeLoginModal">&times;</span>
+        <h2 id="form-title">Login</h2>
+        <form id="auth-form">
+            <input type="hidden" name="action" id="form-action" value="login">
+            <input type="text" name="username" id="username" placeholder="Benutzername" style="display:none;" />
+            <input type="email" name="email" id="email" placeholder="E-Mail Adresse" required />
+            <div style="position:relative;">
+                <input type="password" name="password" id="password" placeholder="Passwort" required />
+                <i class="fas fa-eye" id="togglePassword"
+                   style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;"></i>
+            </div>
+            <button type="submit" class="btn">Einloggen</button>
+        </form>
+        <div class="toggle">
+            <span id="toggle-text">Noch kein Konto?</span>
+            <a href="#" id="toggle-link">Registrieren</a>
+        </div>
     </div>
-  </div>
-
-<!-- Login Modal -->
-<div id="loginModal" class="modal">
-  <div class="modal-content card">
-    <span class="close" id="closeLoginModal">&times;</span>
-    <h2 id="form-title">Login</h2>
-<form id="auth-form">
-  <input type="hidden" name="action" id="form-action" value="login">
-  <input type="text" name="username" id="username" placeholder="Benutzername" style="display:none;" />
-  <input type="email" name="email" id="email" placeholder="E-Mail Adresse" required />
-  <div class="password-wrapper" style="position:relative;">
-    <input type="password" name="password" id="password" placeholder="Passwort" required />
-    <i class="fas fa-eye" id="togglePassword" 
-       style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;"></i>
-  </div>
-  <button type="submit" class="btn">Einloggen</button>
-</form>
-
-    <div class="toggle">
-      <span id="toggle-text">Noch kein Konto?</span>
-      <a href="#" id="toggle-link">Registrieren</a>
-    </div>
-  </div>
 </div>
-
-
-  <footer>
-    <p>&copy; 2025 Sprachenlerner. Alle Rechte vorbehalten. <i class="fas fa-heart"></i></p>
-  </footer>
 
 <script src="../js/Progress.js"></script>
 </body>
