@@ -12,10 +12,9 @@
 </head>
 
 <body>
-
   <nav>
     <ul>
-      <li><a href="../index.html"><i class="fas fa-home"></i> Startseite</a></li>
+      <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
       <li><a href="Progress.html" class="active"><i class="fas fa-list"></i> Mein Fortschritt</a></li>
       <li><a href="#"><i class="fas fa-comments"></i> Community</a></li>
       <li><a href="#" id="profilBtn"><i class="fas fa-user"></i> Mein Profil</a></li>
@@ -51,29 +50,35 @@
     </div>
   </div>
 
-  <!-- Login Modal -->
-  <div id="loginModal" class="modal">
-    <div class="modal-content card">
-      <span class="close" id="closeLoginModal">&times;</span>
-      <h2 id="form-title">Login</h2>
-      <form id="auth-form">
-        <input type="hidden" name="action" id="form-action" value="login">
-        <input type="email" name="email" id="email" placeholder="E-Mail Adresse" required />
-        <input type="password" name="password" id="password" placeholder="Passwort" required />
-        <button type="submit" class="btn">Einloggen</button>
-      </form>
-      <div class="toggle">
-        <span id="toggle-text">Noch kein Konto?</span>
-        <a href="#" id="toggle-link">Registrieren</a>
-      </div>
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content card">
+    <span class="close" id="closeLoginModal">&times;</span>
+    <h2 id="form-title">Login</h2>
+<form id="auth-form">
+  <input type="hidden" name="action" id="form-action" value="login">
+  <input type="text" name="username" id="username" placeholder="Benutzername" style="display:none;" />
+  <input type="email" name="email" id="email" placeholder="E-Mail Adresse" required />
+  <div class="password-wrapper" style="position:relative;">
+    <input type="password" name="password" id="password" placeholder="Passwort" required />
+    <i class="fas fa-eye" id="togglePassword" 
+       style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;"></i>
+  </div>
+  <button type="submit" class="btn">Einloggen</button>
+</form>
+
+    <div class="toggle">
+      <span id="toggle-text">Noch kein Konto?</span>
+      <a href="#" id="toggle-link">Registrieren</a>
     </div>
   </div>
+</div>
+
 
   <footer>
     <p>&copy; 2025 Sprachenlerner. Alle Rechte vorbehalten. <i class="fas fa-heart"></i></p>
   </footer>
 
-  <script src="../js/Progress.js"></script>
-
+<script src="../js/Progress.js"></script>
 </body>
 </html>
