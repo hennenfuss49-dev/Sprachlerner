@@ -55,14 +55,14 @@ function loadUnits() {
                     </div>
                 </li>
             `).join('');
-            // Klick-Event für die erste Unit
-            const firstUnit = unitsList.querySelector('.unit-item');
-            if (firstUnit) {
-                firstUnit.addEventListener('click', function() {
+            // Klick-Event für ALLE Units
+            const allUnits = unitsList.querySelectorAll('.unit-item');
+            allUnits.forEach(unitElem => {
+                unitElem.addEventListener('click', function() {
                     const unitId = this.getAttribute('data-unit-id');
                     window.location.href = `../html/Trainer.html?unit_id=${unitId}`;
                 });
-            }
+            });
         } else {
             unitsList.innerHTML = '<li class="card" style="text-align:center;">Noch keine Fortschritte vorhanden.</li>';
         }
