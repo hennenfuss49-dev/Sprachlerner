@@ -69,10 +69,13 @@ function loadUnits() {
     });
 }
 
-    // Modal öffnen/schließen
-    profilBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        loginModal.style.display = 'block';
+// Modal öffnen bei Klick auf "Mein Profil"
+    profilBtn.addEventListener('click', async (e) => {
+
+        const response = await fetch('../php/checkLogin.php')
+        const data = await response.json();
+        if(data.success) window.location.href = '../html/profile.html';
+        else modal.style.display = 'block';
     });
     if (loginOpenBtn) {
         loginOpenBtn.addEventListener('click', () => loginModal.style.display = 'block');

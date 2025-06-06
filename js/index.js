@@ -15,9 +15,12 @@ const toggleLink = document.getElementById('toggle-link');
 const authForm = document.getElementById('auth-form');
 
 // Modal öffnen bei Klick auf "Mein Profil"
-profilBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    modal.style.display = 'block';
+profilBtn.addEventListener('click', async (e) => {
+
+    const response = await fetch('../php/checkLogin.php')
+    const data = await response.json();
+    if(data.success) window.location.href = '../html/profile.html';
+    else modal.style.display = 'block';
 });
 
 // Modal schließen
