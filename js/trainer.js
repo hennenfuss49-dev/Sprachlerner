@@ -135,6 +135,8 @@ function displayTranslationExercise(container, exercise) {
         <button class="btn" id="submit-translation">Antwort überprüfen</button>
     `;
 
+    speakText(exercise.text, 'de-DE');
+
     inputContainer.querySelector('#submit-translation').addEventListener('click', () => {
         const userAnswer = inputContainer.querySelector('#translation-input').value;
         if (userAnswer.trim() !== '') {
@@ -175,6 +177,7 @@ function displayMatchingExercise(container, exercise) {
         leftItem.dataset.index = i;
         leftItem.dataset.matched = 'false';
         leftItem.addEventListener('click', () => {
+            speakText(leftItem.textContent, "")
             if (leftItem.classList.contains('selected')) {
                 leftItem.classList.remove('selected');
             } else {
@@ -195,6 +198,7 @@ function displayMatchingExercise(container, exercise) {
         rightItem.dataset.index = i;
         rightItem.dataset.matched = 'false';
         rightItem.addEventListener('click', () => {
+            speakText(rightItem.textContent, "")
             const selectedLeft = document.querySelector('.pair-item.selected');
             if (selectedLeft) {
                 const leftIndex = parseInt(selectedLeft.dataset.index);
@@ -321,10 +325,8 @@ function getFeedbackMessage(percentage) {
 
 // Funktion zum Neustarten des Trainers
 function restartTrainer() {
-    completionScreen.style.display = 'none';
-    trainerContent.style.display = 'block';
-    document.querySelector('.controls').style.display = 'flex';
-    loadUnit(1); // Hier können Sie die Unit-ID anpassen
+    //reload page
+    location.reload();
 }
 
 // Initialisierung
@@ -409,4 +411,10 @@ function checkTranslationExercise(exercise, userAnswer) {
 
      updateProgress();
      displayExercise(currentExerciseIndex);
+}
+
+function speakText(text, lang) {
+    let msg = new SpeechSynthesisUtterance();
+    msg.text = text;
+    speechSynthesis.speak(msg);
 }
