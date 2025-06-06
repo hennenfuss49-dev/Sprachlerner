@@ -39,28 +39,35 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Load Units
-    function loadUnits() {
-        fetch('../php/get_progress.php')
-        .then(r => r.json())
-        .then(data => {
-            if(data.success && data.units.length) {
-                unitsList.innerHTML = data.units.map(unit => `
-                    <li class="card" style="margin-bottom:1rem;">
-                        <h3><i class="fas fa-book-open"></i> ${unit.unit_name}</h3>
-                        <div>${unit.description || ''}</div>
-                        <div style="margin-top:0.5em;">
-                            <strong>Level:</strong> ${unit.progress_level ?? 0}
-                            <br>
-                            <strong>Letztes Üben:</strong> ${unit.last_practiced ? unit.last_practiced : '-'}
-                        </div>
-                    </li>
-                `).join('');
-            } else {
-                unitsList.innerHTML = '<li class="card" style="text-align:center;">Noch keine Fortschritte vorhanden.</li>';
+function loadUnits() {
+    fetch('../php/get_progress.php')
+    .then(r => r.json())
+    .then(data => {
+        if(data.success && data.units.length) {
+            unitsList.innerHTML = data.units.map((unit, idx) => `
+                <li class="card unit-item" data-unit-id="${unit.unit_id}" style="margin-bottom:1rem; cursor:pointer;">
+                    <h3><i class="fas fa-book-open"></i> ${unit.unit_name}</h3>
+                    <div>${unit.description || ''}</div>
+                    <div style="margin-top:0.5em;">
+                        <strong>Level:</strong> ${unit.progress_level ?? 0}
+                        <br>
+                        <strong>Letztes Üben:</strong> ${unit.last_practiced ? unit.last_practiced : '-'}
+                    </div>
+                </li>
+            `).join('');
+            // Klick-Event für die erste Unit
+            const firstUnit = unitsList.querySelector('.unit-item');
+            if (firstUnit) {
+                firstUnit.addEventListener('click', function() {
+                    const unitId = this.getAttribute('data-unit-id');
+                    window.location.href = `../html/Trainer.html?unit_id=${unitId}`;
+                });
             }
-        });
-    }
+        } else {
+            unitsList.innerHTML = '<li class="card" style="text-align:center;">Noch keine Fortschritte vorhanden.</li>';
+        }
+    });
+}
 
     // Modal öffnen/schließen
     profilBtn.addEventListener('click', (e) => {
