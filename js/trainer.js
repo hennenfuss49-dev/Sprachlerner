@@ -273,6 +273,9 @@ function updateButtonStates() {
 
     if (currentExerciseIndex === totalQuestions - 1) {
         nextBtn.textContent = 'Fertig';
+        nextBtn.addEventListener('click', () => {
+            window.location.href = `../html/Progress.html`;
+        })
     } else {
         nextBtn.textContent = 'Weiter';
     }
