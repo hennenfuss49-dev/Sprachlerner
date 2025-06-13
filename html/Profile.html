@@ -26,12 +26,33 @@
       Willkommen, <span style="color:var(--primary-color);" id="profile-username">Benutzer</span>!
     </h2>
     <p style="margin-bottom:1.5rem; color:var(--secondary-color);">
-      Hier findest du bald deine Profildaten, Statistiken und Einstellungen.<br>
+      Hier findest du deine Profildaten und Einstellungen.<br>
       <span style="font-size:1.2rem;">👋</span>
     </p>
-    <button class="btn" style="margin-bottom:0.5rem;"><i class="fas fa-cog"></i> Einstellungen</button>
-    <br>
-    <button class="btn" id="logoutBtn" style="background:var(--accent-color); color:var(--secondary-color);"><i class="fas fa-sign-out-alt"></i> Logout</button>
+
+    <!-- Einstellungen -->
+    <div class="settings-section" style="margin:2rem 0 1.5rem 0; text-align:left;">
+      <h3 style="margin-bottom:1rem; color:var(--primary-color);"><i class="fas fa-cog"></i> Einstellungen</h3>
+      <form id="settings-form" autocomplete="off">
+        <div style="margin-bottom:1.2rem;">
+          <label for="settings-username" style="font-weight:bold;">Benutzername</label><br>
+          <input type="text" id="settings-username" name="settings-username" value="" readonly style="width:100%;margin-top:0.3rem;padding:0.5rem;border-radius:0.5rem;border:1px solid #ddd;">
+        </div>
+        <div style="margin-bottom:1.2rem; position:relative;">
+        <label for="settings-password" style="font-weight:bold;">Passwort</label><br>
+        <input type="password" id="settings-password" name="settings-password" value="********" readonly style="width:100%;margin-top:0.3rem;padding:0.5rem 2.5rem 0.5rem 0.5rem;border-radius:0.5rem;border:1px solid #ddd;">
+        <i class="fas fa-eye" id="toggleProfilePassword"
+            style="position:absolute; right:10px; top:38px; cursor:pointer;"></i>
+        </div>
+        <div style="text-align:right;">
+          <button type="button" class="btn" id="editBtn"><i class="fas fa-edit"></i> Bearbeiten</button>
+          <button type="submit" class="btn" id="saveBtn" style="display:none;background:var(--primary-color);color:#fff;"><i class="fas fa-save"></i> Speichern</button>
+          <button type="button" class="btn" id="cancelBtn" style="display:none;background:#ccc;color:#333;">Abbrechen</button>
+        </div>
+      </form>
+    </div>
+
+    <button class="btn" id="logoutBtn" style="background:var(--accent-color); color:var(--secondary-color);margin-top:1rem;"><i class="fas fa-sign-out-alt"></i> Logout</button>
   </div>
 </div>
 
@@ -47,6 +68,7 @@ window.addEventListener('DOMContentLoaded', function() {
       .then(data => {
         if(data.success && data.username) {
           document.getElementById('profile-username').textContent = data.username;
+          document.getElementById('settings-username').value = data.username;
         } else {
           document.getElementById('profile-username').textContent = 'Gast';
         }
@@ -61,10 +83,66 @@ window.addEventListener('DOMContentLoaded', function() {
       })
       .then(r => r.json())
       .then(data => {
-        // Nach Logout zurück zur Startseite oder Login
         window.location.href = '../Index.html';
       });
     });
+
+    // Einstellungen bearbeiten
+    const editBtn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const settingsForm = document.getElementById('settings-form');
+    const usernameField = document.getElementById('settings-username');
+    const passwordField = document.getElementById('settings-password');
+    const toggleProfilePassword = document.getElementById('toggleProfilePassword');
+
+    editBtn.addEventListener('click', function() {
+      usernameField.readOnly = false;
+      passwordField.readOnly = false;
+      saveBtn.style.display = '';
+      cancelBtn.style.display = '';
+      editBtn.style.display = 'none';
+      passwordField.value = '';
+    });
+
+    cancelBtn.addEventListener('click', function() {
+      usernameField.readOnly = true;
+      passwordField.readOnly = true;
+      saveBtn.style.display = 'none';
+      cancelBtn.style.display = 'none';
+      editBtn.style.display = '';
+      passwordField.value = '********';
+      // Optional: Felder zurücksetzen (erneut von Server laden)
+      fetch('../php/get_user.php')
+        .then(r => r.json())
+        .then(data => {
+          if(data.success && data.username) usernameField.value = data.username;
+        });
+    });
+
+    settingsForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Hier könntest du per AJAX die Änderungen an den Server schicken
+      alert('Änderungen speichern ist noch nicht implementiert.');
+      // Nach dem Speichern wieder auf readonly setzen
+      usernameField.readOnly = true;
+      passwordField.readOnly = true;
+      saveBtn.style.display = 'none';
+      cancelBtn.style.display = 'none';
+      editBtn.style.display = '';
+      passwordField.value = '********';
+    });
+
+    // Passwort anzeigen/ausblenden im Profil
+    if (toggleProfilePassword && passwordField) {
+      toggleProfilePassword.addEventListener('click', function () {
+        const type = passwordField.type === 'password' ? 'text' : 'password';
+        passwordField.type = type;
+        this.className = type === 'password'
+          ? 'fas fa-eye'
+          : 'fas fa-eye-slash';
+      });
+    }
 });
 </script>
 </body>
