@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Mein Profil</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-Logged in
+<nav>
+  <ul>
+    <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
+    <li><a href="Progress.html"><i class="fas fa-list"></i> Mein Fortschritt</a></li>
+    <li><a href="#"><i class="fas fa-comments"></i> Community</a></li>
+    <li><a href="Profile.html" class="active"><i class="fas fa-user"></i> Mein Profil</a></li>
+  </ul>
+</nav>
+
+<div class="container" style="max-width:500px; margin:3rem auto;">
+  <div class="card" style="text-align:center; padding:2.5rem 2rem;">
+    <div style="margin-bottom:1.5rem;">
+      <i class="fas fa-user-circle" style="font-size:5rem; color:var(--primary-color);"></i>
+    </div>
+    <h2 style="margin-bottom:0.5rem;">
+      Willkommen, <span style="color:var(--primary-color);" id="profile-username">Benutzer</span>!
+    </h2>
+    <p style="margin-bottom:1.5rem; color:var(--secondary-color);">
+      Hier findest du bald deine Profildaten, Statistiken und Einstellungen.<br>
+      <span style="font-size:1.2rem;">👋</span>
+    </p>
+    <button class="btn" style="margin-bottom:0.5rem;"><i class="fas fa-cog"></i> Einstellungen</button>
+    <br>
+    <button class="btn" id="logoutBtn" style="background:var(--accent-color); color:var(--secondary-color);"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 Sprachenlerner. Alle Rechte vorbehalten. <i class="fas fa-heart"></i></p>
+</footer>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    // Benutzername anzeigen
+    fetch('../php/get_user.php')
+      .then(r => r.json())
+      .then(data => {
+        if(data.success && data.username) {
+          document.getElementById('profile-username').textContent = data.username;
+        } else {
+          document.getElementById('profile-username').textContent = 'Gast';
+        }
+      });
+
+    // Logout-Button
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      fetch('../php/auth.php', {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: 'action=logout'
+      })
+      .then(r => r.json())
+      .then(data => {
+        // Nach Logout zurück zur Startseite oder Login
+        window.location.href = '../Index.html';
+      });
+    });
+});
+</script>
 </body>
 </html>
