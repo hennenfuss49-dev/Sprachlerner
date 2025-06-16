@@ -1,65 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <title>Mein Profil</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <nav>
-      <ul>
-        <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
-        <li><a href="Progress.html"><i class="fas fa-list"></i> Mein Fortschritt</a></li>
-        <li><a href="#"><i class="fas fa-comments"></i> Community</a></li>
-        <li><a href="#" id="meinProfil"><i class="fas fa-user"></i> Mein Profil</a></li>
-      </ul>
-    </nav>
-    <div class="container card" style="max-width:500px; margin:2em auto; text-align:center;">
-        <h2>👤 Profil</h2>
-        <div id="profile-info">
-            <p>Lade Profil ...</p>
+<nav>
+  <ul>
+    <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
+    <li><a href="Progress.html"><i class="fas fa-list"></i> Mein Fortschritt</a></li>
+    <li><a href="#"><i class="fas fa-comments"></i> Community</a></li>
+    <li><a href="Profile.html" class="active"><i class="fas fa-user"></i> Mein Profil</a></li>
+  </ul>
+</nav>
+
+<div class="container card" style="max-width:500px; margin:2em auto; text-align:center;">
+    <h2>👤 Profil</h2>
+    <!-- Einstellungen -->
+    <div class="settings-section" style="margin:2rem 0 1.5rem 0; text-align:left;">
+      <h3 style="margin-bottom:1rem; color:var(--primary-color);"><i class="fas fa-cog"></i> Einstellungen</h3>
+      <form id="settings-form" autocomplete="off">
+        <div style="margin-bottom:1.2rem;">
+          <label for="settings-username" style="font-weight:bold;">Benutzername</label><br>
+          <input type="text" id="settings-username" name="settings-username" value="" readonly style="width:100%;margin-top:0.3rem;padding:0.5rem;border-radius:0.5rem;border:1px solid #ddd;">
         </div>
-        <h3 style="margin-top:2em;">Fortschritt</h3>
-        <ul id="progress-list" style="text-align:left;"></ul>
-        <button class="btn" id="logoutBtn" style="margin-top:2em;">Abmelden</button>
+        <div style="margin-bottom:1.2rem; position:relative;">
+          <label for="settings-password" style="font-weight:bold;">Passwort</label><br>
+          <input type="password" id="settings-password" name="settings-password" value="********" readonly style="width:100%;margin-top:0.3rem;padding:0.5rem 2.5rem 0.5rem 0.5rem;border-radius:0.5rem;border:1px solid #ddd;">
+          <i class="fas fa-eye" id="toggleProfilePassword"
+             style="position:absolute; right:10px; top:38px; cursor:pointer;"></i>
+        </div>
+        <div style="text-align:right;">
+          <button type="button" class="btn" id="editBtn"><i class="fas fa-edit"></i> Bearbeiten</button>
+          <button type="submit" class="btn" id="saveBtn" style="display:none;background:var(--primary-color);color:#fff;"><i class="fas fa-save"></i> Speichern</button>
+          <button type="button" class="btn" id="cancelBtn" style="display:none;background:#ccc;color:#333;">Abbrechen</button>
+        </div>
+      </form>
     </div>
-    <script>
-    fetch('../php/profile_info.php')
+    <button class="btn" id="logoutBtn" style="margin-top:2em;"><i class="fas fa-sign-out-alt"></i> Abmelden</button>
+</div>
+
+<footer>
+  <p>&copy; 2025 Sprachenlerner. Alle Rechte vorbehalten. <i class="fas fa-heart"></i></p>
+</footer>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    // Benutzername anzeigen
+    fetch('../php/get_user.php')
       .then(r => r.json())
       .then(data => {
-        if(data.success) {
-          // Hole Email zusätzlich per Session-Check
-          fetch('../php/auth.php', {
-            method: 'POST',
-            headers: {'Content-Type':'application/x-www-form-urlencoded'},
-            body: 'action=check'
-          })
-          .then(r => r.json())
-          .then(loginData => {
-            let email = loginData.email ? loginData.email : '-';
-            document.getElementById('profile-info').innerHTML = `
-              <p><strong>Name:</strong> ${data.username}</p>
-              <p><strong>Email:</strong> ${email}</p>
-            `;
-          });
-          if(data.units && data.units.length) {
-            document.getElementById('progress-list').innerHTML = data.units.map(unit =>
-              `<li class='card' style='margin-bottom:1em;'>
-                <strong>${unit.unit_name}</strong><br>
-                <span>${unit.description || ''}</span><br>
-                <strong>Level:</strong> ${unit.progress_level} <br>
-                <strong>Letztes Üben:</strong> ${unit.last_practiced}
-              </li>`
-            ).join('');
-          } else {
-            document.getElementById('progress-list').innerHTML = '<li>Kein Fortschritt vorhanden.</li>';
-          }
-        } else {
-          document.getElementById('profile-info').innerHTML = `<p style='color:red;'>${data.message || 'Nicht eingeloggt.'}</p>`;
-          document.getElementById('progress-list').innerHTML = '';
+        if(data.success && data.username) {
+          document.getElementById('settings-username').value = data.username;
         }
       });
+
+    // Logout-Button
     document.getElementById('logoutBtn').addEventListener('click', function() {
       fetch('../php/auth.php', {
         method: 'POST',
@@ -69,6 +68,79 @@
       .then(r => r.json())
       .then(() => window.location.href = '../Index.html');
     });
-    </script>
+
+    // Einstellungen bearbeiten
+    const editBtn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const settingsForm = document.getElementById('settings-form');
+    const usernameField = document.getElementById('settings-username');
+    const passwordField = document.getElementById('settings-password');
+    const toggleProfilePassword = document.getElementById('toggleProfilePassword');
+
+    editBtn.addEventListener('click', function() {
+      usernameField.readOnly = false;
+      passwordField.readOnly = false;
+      saveBtn.style.display = '';
+      cancelBtn.style.display = '';
+      editBtn.style.display = 'none';
+      passwordField.value = '';
+    });
+
+    cancelBtn.addEventListener('click', function() {
+      usernameField.readOnly = true;
+      passwordField.readOnly = true;
+      saveBtn.style.display = 'none';
+      cancelBtn.style.display = 'none';
+      editBtn.style.display = '';
+      passwordField.value = '********';
+      // Zurücksetzen auf alten Namen
+      fetch('../php/get_user.php')
+        .then(r => r.json())
+        .then(data => {
+          if(data.success && data.username) usernameField.value = data.username;
+        });
+    });
+
+    settingsForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const neuerName = usernameField.value.trim();
+      if (!neuerName) {
+        alert('Benutzername darf nicht leer sein.');
+        return;
+      }
+      fetch('../php/update_user.php', {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: 'username=' + encodeURIComponent(neuerName)
+      })
+      .then(r => r.json())
+      .then(data => {
+        if(data.success) {
+          alert('Benutzername erfolgreich geändert!');
+          usernameField.readOnly = true;
+          passwordField.readOnly = true;
+          saveBtn.style.display = 'none';
+          cancelBtn.style.display = 'none';
+          editBtn.style.display = '';
+          passwordField.value = '********';
+        } else {
+          alert(data.message || 'Fehler beim Ändern des Benutzernamens.');
+        }
+      });
+    });
+
+    // Passwort anzeigen/ausblenden im Profil
+    if (toggleProfilePassword && passwordField) {
+      toggleProfilePassword.addEventListener('click', function () {
+        const type = passwordField.type === 'password' ? 'text' : 'password';
+        passwordField.type = type;
+        this.className = type === 'password'
+          ? 'fas fa-eye'
+          : 'fas fa-eye-slash';
+      });
+    }
+});
+</script>
 </body>
 </html>
