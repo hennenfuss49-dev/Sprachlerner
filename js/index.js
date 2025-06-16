@@ -95,7 +95,7 @@ function showProfileModal(username, avatar) {
     img.style.margin = '1em auto';
     document.getElementById('profile-username').before(img);
   }
-  img.src = avatar || 'html/ProfilBild-Loewe.jpg';
+  img.src = avatar || '../html/audio/ProfilBild-Loewe.jpg';
 }
 
 // Beim Öffnen des Modals Profilbild und Name laden

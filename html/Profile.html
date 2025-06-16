@@ -11,7 +11,7 @@
       <ul>
         <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
         <li><a href="Progress.html"><i class="fas fa-list"></i> Mein Fortschritt</a></li>
-        <li><a href="#"><i class="fas fa-comments"></i> Community</a></li>
+        <li><a href="Achievements.html" id="achievementsTab"><i class="fas fa-medal"></i> Achievements</a></li>
         <li><a href="#" id="meinProfil"><i class="fas fa-user"></i> Mein Profil</a></li>
       </ul>
     </nav>
@@ -80,9 +80,9 @@
     
     // Profilbild-Auswahl
     const avatarImages = [
-      '../html/ProfilBild-Loewe.jpg',
-      '../html/ProfilBild-frosch.jpg',
-      '../html/ProfilBild-Schnecke.jpg'
+      './audio/ProfilBild-Schnecke.jpg',
+      './audio/ProfilBild-frosch.jpg',
+      './audio/ProfilBild-Loewe.jpg'
     ];
     let selectedAvatar = null;
 
@@ -105,11 +105,9 @@
       .then(r => r.json())
       .then(data => {
         if(data.success) {
-          // ...existing code...
           // Avatar initialisieren
           selectedAvatar = data.avatar || avatarImages[0];
           renderAvatars(selectedAvatar);
-          // ...existing code...
         }
       });
 
