@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Mein Profil</title>
     <link rel="stylesheet" href="../css/style.css">
+<<<<<<< HEAD
     <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -75,6 +76,64 @@ window.addEventListener('DOMContentLoaded', function() {
       });
 
     // Logout-Button
+=======
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+      <ul>
+        <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
+        <li><a href="Progress.html"><i class="fas fa-list"></i> Mein Fortschritt</a></li>
+        <li><a href="#"><i class="fas fa-comments"></i> Community</a></li>
+        <li><a href="#" id="meinProfil"><i class="fas fa-user"></i> Mein Profil</a></li>
+      </ul>
+    </nav>
+    <div class="container card" style="max-width:500px; margin:2em auto; text-align:center;">
+        <h2>👤 Profil</h2>
+        <div id="profile-info">
+            <p>Lade Profil ...</p>
+        </div>
+        <h3 style="margin-top:2em;">Fortschritt</h3>
+        <ul id="progress-list" style="text-align:left;"></ul>
+        <button class="btn" id="logoutBtn" style="margin-top:2em;">Abmelden</button>
+    </div>
+    <script>
+    fetch('../php/profile_info.php')
+      .then(r => r.json())
+      .then(data => {
+        if(data.success) {
+          // Hole Email zusätzlich per Session-Check
+          fetch('../php/auth.php', {
+            method: 'POST',
+            headers: {'Content-Type':'application/x-www-form-urlencoded'},
+            body: 'action=check'
+          })
+          .then(r => r.json())
+          .then(loginData => {
+            let email = loginData.email ? loginData.email : '-';
+            document.getElementById('profile-info').innerHTML = `
+              <p><strong>Name:</strong> ${data.username}</p>
+              <p><strong>Email:</strong> ${email}</p>
+            `;
+          });
+          if(data.units && data.units.length) {
+            document.getElementById('progress-list').innerHTML = data.units.map(unit =>
+              `<li class='card' style='margin-bottom:1em;'>
+                <strong>${unit.unit_name}</strong><br>
+                <span>${unit.description || ''}</span><br>
+                <strong>Level:</strong> ${unit.progress_level} <br>
+                <strong>Letztes Üben:</strong> ${unit.last_practiced}
+              </li>`
+            ).join('');
+          } else {
+            document.getElementById('progress-list').innerHTML = '<li>Kein Fortschritt vorhanden.</li>';
+          }
+        } else {
+          document.getElementById('profile-info').innerHTML = `<p style='color:red;'>${data.message || 'Nicht eingeloggt.'}</p>`;
+          document.getElementById('progress-list').innerHTML = '';
+        }
+      });
+>>>>>>> 346950bac38bb32a73ccce3fe9ca3f257bac8e9a
     document.getElementById('logoutBtn').addEventListener('click', function() {
       fetch('../php/auth.php', {
         method: 'POST',
@@ -82,6 +141,7 @@ window.addEventListener('DOMContentLoaded', function() {
         body: 'action=logout'
       })
       .then(r => r.json())
+<<<<<<< HEAD
       .then(data => {
         window.location.href = '../Index.html';
       });
@@ -145,5 +205,10 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+=======
+      .then(() => window.location.href = '../Index.html');
+    });
+    </script>
+>>>>>>> 346950bac38bb32a73ccce3fe9ca3f257bac8e9a
 </body>
 </html>
