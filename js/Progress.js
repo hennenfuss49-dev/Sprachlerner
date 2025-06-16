@@ -74,7 +74,7 @@ function loadUnits() {
 
         const response = await fetch('../php/checkLogin.php')
         const data = await response.json();
-        if(data.success) window.location.href = '../html/profile.html';
+        if(data.success) window.location.href = '../html/Profile.html';
         else modal.style.display = 'block';
     });
     if (loginOpenBtn) {
