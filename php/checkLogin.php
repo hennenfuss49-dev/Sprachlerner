@@ -6,4 +6,3 @@ if (isset($_SESSION['user_id'])) {
 } else {
     echo json_encode(['success' => false, 'message' => 'Nicht eingeloggt']);
 }
-
