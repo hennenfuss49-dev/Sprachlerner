@@ -23,6 +23,14 @@
         <h3 style="margin-top:2em;">Fortschritt</h3>
         <ul id="progress-list" style="text-align:left;"></ul>
         <button class="btn" id="logoutBtn" style="margin-top:2em;">Abmelden</button>
+        
+        <!-- Profilbild-Auswahl -->
+        <div style="margin:2em 0;">
+            <h3>Profilbild wählen</h3>
+            <div id="avatar-selection" style="display:flex; justify-content:center; gap:2em; margin-bottom:1em;"></div>
+            <button class="btn" id="saveAvatarBtn">Profilbild speichern</button>
+            <div id="avatar-success" style="color:green; margin-top:1em;"></div>
+        </div>
     </div>
     <script>
     fetch('../php/profile_info.php')
@@ -38,7 +46,7 @@
           .then(r => r.json())
           .then(loginData => {
             let email = loginData.email ? loginData.email : '-';
-            document.getElementById('profile-info').innerHTML = `
+            document.getElementById('profile-info').innerHTML = `   
               <p><strong>Name:</strong> ${data.username}</p>
               <p><strong>Email:</strong> ${email}</p>
             `;
@@ -69,6 +77,56 @@
       .then(r => r.json())
       .then(() => window.location.href = '../Index.html');
     });
+    
+    // Profilbild-Auswahl
+    const avatarImages = [
+      '../html/ProfilBild-Loewe.jpg',
+      '../html/ProfilBild-frosch.jpg',
+      '../html/ProfilBild-Schnecke.jpg'
+    ];
+    let selectedAvatar = null;
+
+    function renderAvatars(currentAvatar) {
+      const avatarDiv = document.getElementById('avatar-selection');
+      avatarDiv.innerHTML = avatarImages.map(img =>
+        `<img src="${img}" class="avatar-img${currentAvatar===img?' selected':''}" data-avatar="${img}" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--primary-color); cursor:pointer; box-shadow:0 2px 8px #0001; object-fit:cover;${currentAvatar===img?' box-shadow:0 0 0 4px var(--accent-color);':''}">`
+      ).join('');
+      document.querySelectorAll('.avatar-img').forEach(img => {
+        img.onclick = function() {
+          document.querySelectorAll('.avatar-img').forEach(i=>i.classList.remove('selected'));
+          img.classList.add('selected');
+          selectedAvatar = img.getAttribute('data-avatar');
+        };
+      });
+    }
+
+    // Profil laden und Avatar anzeigen
+    fetch('../php/profile_info.php')
+      .then(r => r.json())
+      .then(data => {
+        if(data.success) {
+          // ...existing code...
+          // Avatar initialisieren
+          selectedAvatar = data.avatar || avatarImages[0];
+          renderAvatars(selectedAvatar);
+          // ...existing code...
+        }
+      });
+
+    document.getElementById('saveAvatarBtn').onclick = function() {
+      if(!selectedAvatar) return;
+      fetch('../php/profile_info.php', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:'set_avatar=1&avatar='+encodeURIComponent(selectedAvatar)
+      })
+      .then(r=>r.json())
+      .then(res=>{
+        if(res.success) {
+          document.getElementById('avatar-success').textContent = 'Profilbild gespeichert!';
+        }
+      });
+    };
     </script>
 </body>
 </html>
