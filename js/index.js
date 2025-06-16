@@ -1,4 +1,3 @@
-
 // Modal-Elemente
 const profilBtn = document.querySelector('#meinProfil');
 const modal = document.getElementById('loginModal');
@@ -81,3 +80,51 @@ authForm.addEventListener('submit', function(e){
     }
     });
 });
+
+// Profilbild im Modal anzeigen
+function showProfileModal(username, avatar) {
+  document.getElementById('profile-username').innerHTML = `<strong>${username}</strong>`;
+  let img = document.getElementById('profile-avatar-img');
+  if (!img) {
+    img = document.createElement('img');
+    img.id = 'profile-avatar-img';
+    img.style.width = '100px';
+    img.style.height = '100px';
+    img.style.borderRadius = '50%';
+    img.style.objectFit = 'cover';
+    img.style.margin = '1em auto';
+    document.getElementById('profile-username').before(img);
+  }
+  img.src = avatar || '../html/audio/ProfilBild-Loewe.jpg';
+}
+
+// Beim Öffnen des Modals Profilbild und Name laden
+// (Kein redeclare von profilBtn, sondern reuse)
+if(window.showProfileModalInit !== true) {
+  window.showProfileModalInit = true;
+  profilBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const response = await fetch('php/profile_info.php');
+    const data = await response.json();
+    if(data.success) {
+      showProfileModal(data.username, data.avatar);
+      document.getElementById('profileModal').style.display = 'block';
+    } else {
+      window.location.href = 'html/Login.html';
+    }
+  });
+}
+// Modal schließen
+const closeProfileModal = document.getElementById('closeProfileModal');
+if(closeProfileModal) closeProfileModal.onclick = () => document.getElementById('profileModal').style.display = 'none';
+// Logout
+const logoutBtn = document.getElementById('logoutBtn');
+if(logoutBtn) logoutBtn.onclick = function() {
+  fetch('php/auth.php', {
+    method: 'POST',
+    headers: {'Content-Type':'application/x-www-form-urlencoded'},
+    body: 'action=logout'
+  })
+  .then(r => r.json())
+  .then(() => window.location.href = 'Index.html');
+};

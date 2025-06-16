@@ -65,4 +65,4 @@ if ($action === 'check') {
     }
     exit;
 }
-?>
+?>  

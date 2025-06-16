@@ -8,6 +8,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+<<<<<<< HEAD
 <nav>
   <ul>
     <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
@@ -39,6 +40,32 @@
           <button type="button" class="btn" id="cancelBtn" style="display:none;background:#ccc;color:#333;">Abbrechen</button>
         </div>
       </form>
+=======
+    <nav>
+      <ul>
+        <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
+        <li><a href="Progress.html"><i class="fas fa-list"></i> Mein Fortschritt</a></li>
+        <li><a href="Achievements.html" id="achievementsTab"><i class="fas fa-medal"></i> Achievements</a></li>
+        <li><a href="#" id="meinProfil"><i class="fas fa-user"></i> Mein Profil</a></li>
+      </ul>
+    </nav>
+    <div class="container card" style="max-width:500px; margin:2em auto; text-align:center;">
+        <h2>👤 Profil</h2>
+        <div id="profile-info">
+            <p>Lade Profil ...</p>
+        </div>
+        <h3 style="margin-top:2em;">Fortschritt</h3>
+        <ul id="progress-list" style="text-align:left;"></ul>
+        <button class="btn" id="logoutBtn" style="margin-top:2em;">Abmelden</button>
+        
+        <!-- Profilbild-Auswahl -->
+        <div style="margin:2em 0;">
+            <h3>Profilbild wählen</h3>
+            <div id="avatar-selection" style="display:flex; justify-content:center; gap:2em; margin-bottom:1em;"></div>
+            <button class="btn" id="saveAvatarBtn">Profilbild speichern</button>
+            <div id="avatar-success" style="color:green; margin-top:1em;"></div>
+        </div>
+>>>>>>> 497455bc3f11b2396c09b3c14be3402a103ebe23
     </div>
     <button class="btn" id="logoutBtn" style="margin-top:2em;"><i class="fas fa-sign-out-alt"></i> Abmelden</button>
 </div>
@@ -53,8 +80,41 @@ window.addEventListener('DOMContentLoaded', function() {
     fetch('../php/get_user.php')
       .then(r => r.json())
       .then(data => {
+<<<<<<< HEAD
         if(data.success && data.username) {
           document.getElementById('settings-username').value = data.username;
+=======
+        if(data.success) {
+          // Hole Email zusätzlich per Session-Check
+          fetch('../php/auth.php', {
+            method: 'POST',
+            headers: {'Content-Type':'application/x-www-form-urlencoded'},
+            body: 'action=check'
+          })
+          .then(r => r.json())
+          .then(loginData => {
+            let email = loginData.email ? loginData.email : '-';
+            document.getElementById('profile-info').innerHTML = `   
+              <p><strong>Name:</strong> ${data.username}</p>
+              <p><strong>Email:</strong> ${email}</p>
+            `;
+          });
+          if(data.units && data.units.length) {
+            document.getElementById('progress-list').innerHTML = data.units.map(unit =>
+              `<li class='card' style='margin-bottom:1em;'>
+                <strong>${unit.unit_name}</strong><br>
+                <span>${unit.description || ''}</span><br>
+                <strong>Level:</strong> ${unit.progress_level} <br>
+                <strong>Letztes Üben:</strong> ${unit.last_practiced}
+              </li>`
+            ).join('');
+          } else {
+            document.getElementById('progress-list').innerHTML = '<li>Kein Fortschritt vorhanden.</li>';
+          }
+        } else {
+          document.getElementById('profile-info').innerHTML = `<p style='color:red;'>${data.message || 'Nicht eingeloggt.'}</p>`;
+          document.getElementById('progress-list').innerHTML = '';
+>>>>>>> 497455bc3f11b2396c09b3c14be3402a103ebe23
         }
       });
 
@@ -68,6 +128,7 @@ window.addEventListener('DOMContentLoaded', function() {
       .then(r => r.json())
       .then(() => window.location.href = '../Index.html');
     });
+<<<<<<< HEAD
 
     // Einstellungen bearbeiten
     const editBtn = document.getElementById('editBtn');
@@ -142,5 +203,56 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+=======
+    
+    // Profilbild-Auswahl
+    const avatarImages = [
+      './audio/ProfilBild-Schnecke.jpg',
+      './audio/ProfilBild-frosch.jpg',
+      './audio/ProfilBild-Loewe.jpg'
+    ];
+    let selectedAvatar = null;
+
+    function renderAvatars(currentAvatar) {
+      const avatarDiv = document.getElementById('avatar-selection');
+      avatarDiv.innerHTML = avatarImages.map(img =>
+        `<img src="${img}" class="avatar-img${currentAvatar===img?' selected':''}" data-avatar="${img}" style="width:80px; height:80px; border-radius:50%; border:3px solid var(--primary-color); cursor:pointer; box-shadow:0 2px 8px #0001; object-fit:cover;${currentAvatar===img?' box-shadow:0 0 0 4px var(--accent-color);':''}">`
+      ).join('');
+      document.querySelectorAll('.avatar-img').forEach(img => {
+        img.onclick = function() {
+          document.querySelectorAll('.avatar-img').forEach(i=>i.classList.remove('selected'));
+          img.classList.add('selected');
+          selectedAvatar = img.getAttribute('data-avatar');
+        };
+      });
+    }
+
+    // Profil laden und Avatar anzeigen
+    fetch('../php/profile_info.php')
+      .then(r => r.json())
+      .then(data => {
+        if(data.success) {
+          // Avatar initialisieren
+          selectedAvatar = data.avatar || avatarImages[0];
+          renderAvatars(selectedAvatar);
+        }
+      });
+
+    document.getElementById('saveAvatarBtn').onclick = function() {
+      if(!selectedAvatar) return;
+      fetch('../php/profile_info.php', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:'set_avatar=1&avatar='+encodeURIComponent(selectedAvatar)
+      })
+      .then(r=>r.json())
+      .then(res=>{
+        if(res.success) {
+          document.getElementById('avatar-success').textContent = 'Profilbild gespeichert!';
+        }
+      });
+    };
+    </script>
+>>>>>>> 497455bc3f11b2396c09b3c14be3402a103ebe23
 </body>
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Achievements</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<nav>
+  <ul>
+    <li><a href="../Index.html"><i class="fas fa-home"></i> Startseite</a></li>
+    <li><a href="Progress.html"><i class="fas fa-list"></i> Mein Fortschritt</a></li>
+    <li><a href="Achievements.html" class="active"><i class="fas fa-medal"></i> Achievements</a></li>
+    <li><a href="Profile.html" id="meinProfil"><i class="fas fa-user"></i> Mein Profil</a></li>
+  </ul>
+</nav>
+<div class="container card" style="max-width:600px; margin:2em auto; text-align:center;">
+    <h2><i class="fas fa-medal"></i> Achievements</h2>
+    <div id="achievements-list" style="display:flex; flex-wrap:wrap; gap:1em; justify-content:center;"></div>
+    <button class="btn" onclick="window.location.href='Profile.html'" style="margin-top:2em;">Zurück zum Profil</button>
+</div>
+<script>
+fetch('../php/get_achievements.php')
+  .then(r => r.json())
+  .then(data => {
+    if(data.success) {
+      document.getElementById('achievements-list').innerHTML = data.achievements.map(a =>
+        `<div class='card' style='min-width:150px; text-align:center; background:var(--background-color); opacity:${a.achieved ? 1 : 0.4};'>
+          <i class='fas ${a.icon}' style='font-size:2.5em; color:${a.achieved ? 'var(--primary-color)' : '#aaa'}; margin-bottom:0.5em;'></i>
+          <div style='font-weight:bold;'>${a.title}</div>
+          <div style='font-size:0.95em; color:#555;'>${a.desc}</div>
+          ${a.achieved ? '<div style="color:green;font-weight:bold;">✔️</div>' : '<div style="color:#aaa;">Locked</div>'}
+        </div>`
+      ).join('');
+    } else {
+      document.getElementById('achievements-list').innerHTML = '<p style="color:red;">Fehler beim Laden der Achievements.</p>';
+    }
+  });
+</script>
+</body>
+</html>
